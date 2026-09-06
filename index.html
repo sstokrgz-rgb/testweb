@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TempMail - Khusus DKH SHOP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+        }
+
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-8 px-4 sm:px-8 relative">
+
+    <!-- ============================================== -->
+    <!-- MODAL PASSWORD LOGIN (Menutupi seluruh layar)  -->
+    <!-- ============================================== -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md">
+        <div class="glass-panel bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center border border-slate-100">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-bold text-slate-800 mb-2">Akses Terbatas</h2>
+            <p class="text-slate-500 text-sm mb-6">Masukkan password untuk masuk ke layanan TempMail.</p>
+            
+            <form onsubmit="checkPassword(event)" class="flex flex-col gap-4">
+                <input type="password" id="password-input" placeholder="Ketik password di sini..." 
+                    class="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-700 font-medium focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20">
+                
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-indigo-600/30 active:scale-95">
+                    Masuk ke TempMail
+                </button>
+            </form>
+            <p id="error-msg" class="text-red-500 text-xs mt-3 hidden font-medium">Wkwkwk password salah! Silakan coba lagi.</p>
+        </div>
+    </div>
+    <!-- ============================================== -->
+
+    <header class="w-full max-w-6xl flex justify-between items-center mb-8">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg shadow-indigo-600/30">
+                <i class="fa-solid fa-envelope-open-text text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-800">Temp<span class="text-indigo-600">Mail</span></h1>
+                <p class="text-xs text-slate-500 font-medium tracking-wide uppercase">Layanan Email Sementara</p>
+                <p class="text-xs text-slate-500 font-medium tracking-wide uppercase">DKH SHOP MARKET</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold border border-green-200">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            Sistem Aktif
+        </div>
+    </header>
+
+    <div class="w-full max-w-6xl flex flex-col gap-6">
+
+        <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
+            <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col lg:flex-row items-center gap-6">
+                
+                <div class="flex-grow w-full flex flex-col sm:flex-row bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all" id="input-container">
+                    
+                    <div class="flex-grow relative flex items-center">
+                        <i class="fa-solid fa-user absolute left-4 text-slate-400"></i>
+                        <input type="text" id="username-input" placeholder="ketik-username-disini" 
+                            class="w-full py-3.5 pl-10 pr-4 text-slate-700 font-medium focus:outline-none disabled:bg-slate-50 disabled:text-slate-500">
+                    </div>
+                    
+                    <div class="h-px w-full sm:h-auto sm:w-px bg-slate-200"></div>
+                    
+                    <div class="relative flex items-center bg-slate-50">
+                        <span class="pl-4 font-bold text-slate-400">@</span>
+                        <select id="domain-select" class="bg-transparent py-3.5 pl-1 pr-10 text-slate-700 font-medium focus:outline-none cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed appearance-none">
+                            <option value="domain.cc.cd">freesiaa.my.id</option>
+                            <option value="domain.cc.cd">domain.cc.cd</option>
+                            <option value="domain.web.id">domain.web.id</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-4 text-xs text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div class="flex w-full lg:w-auto gap-3 shrink-0">
+                    <button onclick="generateRandom()" id="btn-random" title="Buat Username Acak" class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-3.5 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-slate-200">
+                        <i class="fa-solid fa-dice"></i> <span class="lg:hidden">Acak</span>
+                    </button>
+                    
+                    <button onclick="toggleLock()" id="btn-lock" class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3.5 rounded-xl font-medium transition-all shadow-md shadow-indigo-600/20 active:scale-95">
+                        <i class="fa-solid fa-lock" id="icon-lock"></i> <span id="text-lock">Kunci Email</span>
+                    </button>
+
+                    <button onclick="copyEmail()" id="btn-copy" class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-6 py-3.5 rounded-xl font-medium transition-all shadow-md shadow-slate-800/20 active:scale-95 disabled:opacity-50">
+                        <i class="fa-regular fa-copy" id="icon-copy"></i> <span id="text-copy">Salin</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex items-center justify-between text-sm">
+                <p class="text-slate-500 font-medium">Status Email: <span id="status-text" class="text-amber-500 font-bold"><i class="fa-solid fa-pen"></i> Mode Edit (Terbuka)</span></p>
+                <p class="text-slate-400 text-xs hidden sm:block">Refresh otomatis setiap 5 detik setelah dikunci</p>
+            </div>
+        </div>
+
+        <div id="unlock-instruction" class="glass-panel rounded-2xl p-16 flex flex-col items-center justify-center text-center">
+            <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-shield-halved text-4xl text-indigo-400"></i>
+            </div>
+            <h2 class="text-xl font-bold text-slate-800 mb-2">Konfigurasi Belum Terkunci</h2>
+            <p class="text-slate-500 max-w-md">Silakan atur Username dan Domain Anda di atas, lalu klik tombol <b>"Kunci Email"</b> untuk mulai menerima pesan masuk dari Cloudflare.</p>
+        </div>
+
+        <div id="inbox-panel" class="hidden glass-panel rounded-2xl overflow-hidden h-[700px] flex flex-col md:flex-row shadow-xl">
+            
+            <!-- Sidebar -->
+            <div class="w-full md:w-1/3 border-r border-slate-200 flex flex-col bg-slate-50/50">
+                <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-white/50 backdrop-blur-sm">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-inbox text-indigo-500"></i> Kotak Masuk
+                    </h3>
+                    <button onclick="manualRefresh()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 bg-indigo-50 px-2 py-1 rounded-md transition-all">
+                        <i class="fa-solid fa-sync-alt" id="icon-refresh"></i> Refresh
+                    </button>
+                </div>
+                
+                <div id="email-list" class="flex-grow overflow-y-auto divide-y divide-slate-100">
+                    <!-- List List -->
+                </div>
+            </div>
+
+            <!-- Detail Email -->
+            <div class="w-full md:w-2/3 bg-white flex flex-col relative">
+                
+                <div id="email-content-view" class="absolute inset-0 flex flex-col hidden z-10 bg-white">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h2 id="view-subject" class="text-xl font-bold text-slate-800 mb-4 leading-snug"></h2>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 text-sm">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="flex-grow overflow-hidden">
+                                <p class="text-slate-800 font-semibold truncate" id="view-sender"></p>
+                                <p class="text-slate-500 text-xs">Kepada: <span id="view-receiver" class="font-medium text-indigo-600"></span></p>
+                            </div>
+                            <div class="text-slate-400 text-xs font-medium sm:text-right" id="view-date"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-grow p-0 relative overflow-hidden bg-white">
+                        <iframe id="view-iframe" class="w-full h-full border-0" sandbox="allow-same-origin allow-popups allow-scripts"></iframe>
+                    </div>
+                </div>
+
+                <div id="email-empty-view" class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-0">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3178/3178283.png" alt="Mail" class="w-32 h-32 opacity-20 mb-4 grayscale">
+                    <h3 class="text-lg font-bold text-slate-700 mb-1">Pilih Pesan</h3>
+                    <p class="text-slate-500 text-sm">Klik salah satu email di daftar sebelah kiri untuk membaca isinya dan melihat tema asli pengirim.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // PENGATURAN UTAMA
+        // ==========================================
+        const WORKER_URL = "https://wandering-limit-0e54.tyosxyz.workers.dev";
+        const PASSWORD_RAHASIA = "buyerdkh01";
+
+        let isLocked = false;
+        let activeFullEmail = "";
+        let emailsData = [];
+        let activeEmailIndex = null;
+        let refreshTimer = null;
+
+        const inputUsername = document.getElementById('username-input');
+        const selectDomain = document.getElementById('domain-select');
+        const btnRandom = document.getElementById('btn-random');
+        const btnLock = document.getElementById('btn-lock');
+        const iconLock = document.getElementById('icon-lock');
+        const textLock = document.getElementById('text-lock');
+        const statusText = document.getElementById('status-text');
+        
+        const instructionPanel = document.getElementById('unlock-instruction');
+        const inboxPanel = document.getElementById('inbox-panel');
+        const emailList = document.getElementById('email-list');
+
+        // ==========================================
+        // SAAT HALAMAN DIMUAT (LOAD)
+        // ==========================================
+        window.onload = () => {
+            // 1. Cek Sesi Login Password
+            const isLoggedIn = sessionStorage.getItem('tempmail_logged_in');
+            const modal = document.getElementById('auth-modal');
+            
+            if (isLoggedIn === 'true') {
+                modal.classList.add('hidden'); // Sembunyikan jika sudah pernah login di sesi ini
+            } else {
+                modal.classList.remove('hidden'); // Tampilkan kotak password
+            }
+
+            // 2. Siapkan Username dan Domain (Cek apakah ada history lokal)
+            const savedEmail = localStorage.getItem('modern_cf_temp_email');
+            if (savedEmail && savedEmail.includes('@')) {
+                const parts = savedEmail.split('@');
+                inputUsername.value = parts[0];
+                selectDomain.value = parts[1];
+            } else {
+                generateRandom();
+            }
+        };
+
+        // ==========================================
+        // FUNGSI CEK PASSWORD
+        // ==========================================
+        function checkPassword(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('password-input').value;
+            const modal = document.getElementById('auth-modal');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (inputVal === PASSWORD_RAHASIA) {
+                modal.classList.add('hidden');
+                sessionStorage.setItem('tempmail_logged_in', 'true');
+            } else {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('password-input').value = '';
+                document.getElementById('password-input').focus();
+            }
+        }
+
+        // ==========================================
+        // FUNGSI TOMBOL-TOMBOL (Acak, Kunci, Salin)
+        // ==========================================
+        function generateRandom() {
+            if (isLocked) return;
+            const randomString = Math.random().toString(36).substring(2, 10);
+            inputUsername.value = randomString;
+        }
+
+        function toggleLock() {
+            const username = inputUsername.value.trim().toLowerCase().replace(/[^a-z0-9\._-]/g, '');
+            const domain = selectDomain.value;
+
+            if (!username) {
+                alert("Username tidak boleh kosong!");
+                inputUsername.focus();
+                return;
+            }
+
+            if (!isLocked) {
+                isLocked = true;
+                activeFullEmail = `${username}@${domain}`;
+                inputUsername.value = username; 
+                
+                localStorage.setItem('modern_cf_temp_email', activeFullEmail);
+
+                inputUsername.disabled = true;
+                selectDomain.disabled = true;
+                btnRandom.disabled = true;
+                
+                btnLock.classList.replace('bg-indigo-600', 'bg-red-500');
+                btnLock.classList.replace('hover:bg-indigo-700', 'hover:bg-red-600');
+                btnLock.classList.replace('shadow-indigo-600/20', 'shadow-red-500/20');
+                iconLock.className = 'fa-solid fa-unlock';
+                textLock.textContent = 'Buka Kunci (Edit)';
+                
+                statusText.innerHTML = `<i class="fa-solid fa-check-circle"></i> Terkunci - Menerima Email`;
+                statusText.className = 'text-green-600 font-bold';
+
+                instructionPanel.classList.add('hidden');
+                inboxPanel.classList.remove('hidden');
+                inboxPanel.classList.add('flex'); 
+
+                manualRefresh();
+                refreshTimer = setInterval(fetchEmails, 5000); // 5 Detik
+
+            } else {
+                isLocked = false;
+                
+                inputUsername.disabled = false;
+                selectDomain.disabled = false;
+                btnRandom.disabled = false;
+
+                btnLock.classList.replace('bg-red-500', 'bg-indigo-600');
+                btnLock.classList.replace('hover:bg-red-600', 'hover:bg-indigo-700');
+                btnLock.classList.replace('shadow-red-500/20', 'shadow-indigo-600/20');
+                iconLock.className = 'fa-solid fa-lock';
+                textLock.textContent = 'Kunci Email';
+
+                statusText.innerHTML = `<i class="fa-solid fa-pen"></i> Mode Edit (Terbuka)`;
+                statusText.className = 'text-amber-500 font-bold';
+
+                instructionPanel.classList.remove('hidden');
+                inboxPanel.classList.add('hidden');
+                inboxPanel.classList.remove('flex');
+                
+                clearInterval(refreshTimer);
+            }
+        }
+
+        function copyEmail() {
+            const emailToCopy = isLocked ? activeFullEmail : `${inputUsername.value.trim()}@${selectDomain.value}`;
+            if(!inputUsername.value.trim()) return;
+
+            navigator.clipboard.writeText(emailToCopy).then(() => {
+                const iconCopy = document.getElementById('icon-copy');
+                const textCopy = document.getElementById('text-copy');
+                
+                iconCopy.className = 'fa-solid fa-check text-green-400';
+                textCopy.textContent = 'Tersalin!';
+                
+                setTimeout(() => {
+                    iconCopy.className = 'fa-regular fa-copy';
+                    textCopy.textContent = 'Salin';
+                }, 2000);
+            });
+        }
+
+        // ==========================================
+        // FUNGSI PENGAMBILAN DATA (API)
+        // ==========================================
+        async function fetchEmails() {
+            if (!isLocked) return;
+
+            try {
+                const response = await fetch(`${WORKER_URL}/api/inbox/${activeFullEmail}`);
+                if (!response.ok) throw new Error("Gagal load dari API");
+                
+                const data = await response.json();
+                const newData = data.messages || []; 
+                
+                if (JSON.stringify(newData) !== JSON.stringify(emailsData)) {
+                    emailsData = newData;
+                    renderEmailList();
+                }
+
+            } catch (error) {
+                console.error("Error Fetch:", error);
+            }
+        }
+
+        function manualRefresh() {
+            const icon = document.getElementById('icon-refresh');
+            icon.classList.add('fa-spin');
+            
+            emailList.innerHTML = `<div class="p-8 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-indigo-500"></i><br>Mengecek Server...</div>`;
+            
+            fetchEmails().then(() => {
+                renderEmailList(); 
+                setTimeout(() => icon.classList.remove('fa-spin'), 500);
+            });
+        }
+
+        function renderEmailList() {
+            emailList.innerHTML = '';
+
+            if (emailsData.length === 0) {
+                emailList.innerHTML = `
+                    <div class="p-10 flex flex-col items-center justify-center text-center h-full text-slate-400">
+                        <i class="fa-solid fa-envelope-circle-check text-4xl mb-3 opacity-30"></i>
+                        <p class="text-sm font-medium">Belum ada pesan.</p>
+                        <p class="text-xs mt-1">Pesan yang dikirim ke <br><b class="text-slate-500">${activeFullEmail}</b><br>akan otomatis muncul di sini.</p>
+                    </div>`;
+                return;
+            }
+
+            emailsData.forEach((mail, index) => {
+                const isActive = index === activeEmailIndex;
+                const el = document.createElement('div');
+                
+                el.className = `p-4 cursor-pointer transition-all border-l-4 ${isActive ? 'bg-indigo-50 border-indigo-600' : 'bg-white border-transparent hover:bg-slate-50'}`;
+                el.onclick = () => openEmail(index);
+
+                const time = new Date(mail.date).toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'});
+                
+                let sender = mail.fromName || mail.from || 'Unknown';
+                if(sender.length > 25) sender = sender.substring(0,25) + '...';
+
+                el.innerHTML = `
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="font-bold text-sm ${isActive ? 'text-indigo-800' : 'text-slate-800'} truncate mr-2">${sender}</span>
+                        <span class="text-xs text-slate-400 whitespace-nowrap">${time}</span>
+                    </div>
+                    <div class="text-sm ${isActive ? 'text-indigo-900 font-medium' : 'text-slate-600'} truncate">${mail.subject || '(Tanpa Subjek)'}</div>
+                `;
+                
+                emailList.appendChild(el);
+            });
+        }
+
+        // ==========================================
+        // FUNGSI MEMBACA ISI EMAIL & HTML
+        // ==========================================
+        async function openEmail(index) {
+            activeEmailIndex = index;
+            renderEmailList(); 
+            
+            const mail = emailsData[index];
+            const iframe = document.getElementById('view-iframe');
+
+            document.getElementById('email-empty-view').classList.add('hidden');
+            document.getElementById('email-content-view').classList.remove('hidden');
+            document.getElementById('email-content-view').classList.add('flex');
+
+            document.getElementById('view-subject').textContent = mail.subject || '(Tanpa Subjek)';
+            const senderDisplay = mail.fromName ? `${mail.fromName} <${mail.from}>` : (mail.from || 'Unknown Sender');
+            document.getElementById('view-sender').textContent = senderDisplay;
+            document.getElementById('view-receiver').textContent = activeFullEmail;
+            
+            const dateFull = new Date(mail.date).toLocaleString('id-ID', {
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', 
+                hour: '2-digit', minute: '2-digit'
+            });
+            document.getElementById('view-date').textContent = dateFull;
+
+            iframe.srcdoc = `
+                <div style="display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif; color:#64748b;">
+                    <p>Mengunduh tampilan asli pesan...</p>
+                </div>
+            `;
+
+            try {
+                const endpointsToTry = [
+                    `${WORKER_URL}/api/message/${mail.id}`, 
+                    `${WORKER_URL}/api/messages/${mail.id}`,
+                    `${WORKER_URL}/api/inbox/${activeFullEmail}/${mail.id}`,
+                ];
+
+                let fullMailData = null;
+
+                for (let ep of endpointsToTry) {
+                    try {
+                        let res = await fetch(ep);
+                        if (res.ok) {
+                            let data = await res.json();
+                            if (data.html || data.text || data.body || (data.data && data.data.html)) {
+                                fullMailData = data;
+                                break; 
+                            }
+                        }
+                    } catch (e) {
+                        // Abaikan dan lanjut loop
+                    }
+                }
+
+                if (fullMailData) {
+                    let htmlContent = fullMailData.html || fullMailData.body || (fullMailData.data ? fullMailData.data.html : null);
+                    let textContent = fullMailData.text || (fullMailData.data ? fullMailData.data.text : null);
+
+                    if (htmlContent) {
+                        iframe.srcdoc = htmlContent;
+                    } else if (textContent) {
+                        iframe.srcdoc = `<pre style="font-family: system-ui, sans-serif; padding: 20px; white-space: pre-wrap;">${textContent}</pre>`;
+                    } else {
+                        iframe.srcdoc = `<pre style="padding: 20px; color: red;">Format pesan tidak dikenali. RAW:\n${JSON.stringify(fullMailData, null, 2)}</pre>`;
+                    }
+                } else {
+                    throw new Error("Semua jalur API gagal mengembalikan isi HTML.");
+                }
+
+            } catch (error) {
+                console.warn("Gagal mengekstrak HTML:", error);
+                iframe.srcdoc = `
+                    <div style="font-family: system-ui, -apple-system, sans-serif; padding: 20px;">
+                        <div style="background-color: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px;">
+                            <b>Pratinjau Teks (Fallback)</b><br>
+                            Sistem API Anda gagal mengembalikan kode HTML. Kami menampilkan teks pratinjau agar Anda tetap bisa melihat kode.
+                        </div>
+                        <p style="white-space: pre-wrap; font-size: 16px; color: #0f172a; font-weight: 600;">
+                            ${mail.preview || '(Pesan tidak dapat dimuat)'}
+                        </p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

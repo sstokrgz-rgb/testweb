@@ -41,7 +41,7 @@
                 <i class="fa-solid fa-lock"></i>
             </div>
             <h2 class="text-xl font-bold text-slate-800 mb-2">Akses Terbatas</h2>
-            <p class="text-slate-500 text-sm mb-6">Masukkan password untuk masuk ke layanan TempMail.</p>
+            <p class="text-slate-500 text-sm mb-6">Masukkan kata sandi Admin atau Member untuk melanjutkan.</p>
             
             <form onsubmit="checkPassword(event)" class="flex flex-col gap-4">
                 <input type="password" id="password-input" placeholder="Ketik password di sini..." 
@@ -67,17 +67,49 @@
                 <p class="text-xs text-slate-500 font-medium tracking-wide uppercase">DKH SHOP MARKET</p>
             </div>
         </div>
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold border border-green-200">
-            <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            Sistem Aktif
+        <div class="flex items-center gap-3">
+            <div id="role-badge" class="hidden px-3 py-1.5 rounded-full text-xs font-bold border uppercase tracking-wider">Role</div>
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold border border-green-200">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Sistem Aktif
+            </div>
         </div>
     </header>
 
     <div class="w-full max-w-6xl flex flex-col gap-6">
 
+        <!-- PANEL MONITORING ADMIN -->
+        <div id="admin-panel" class="hidden glass-panel rounded-2xl p-6 border-l-4 border-purple-500 bg-purple-50/40 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div>
+                    <h3 class="font-bold text-purple-900 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-user-secret text-purple-600"></i> Panel Pemantauan Admin
+                    </h3>
+                    <p class="text-sm text-purple-700/80">Pantau kotak masuk member yang sedang menerima email.</p>
+                </div>
+                <button onclick="fetchActiveUsers()" class="px-4 py-2 bg-purple-200 hover:bg-purple-300 text-purple-800 rounded-lg text-xs font-bold transition-all flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-sync"></i> Refresh Daftar Member
+                </button>
+            </div>
+
+            <!-- Daftar Member Muncul Di Sini -->
+            <div class="bg-white rounded-xl border border-purple-100 p-2 mb-4 h-40 overflow-y-auto shadow-inner" id="active-users-list">
+                <p class="text-slate-400 text-sm text-center mt-4"><i class="fa-solid fa-spinner fa-spin"></i> Memuat daftar member...</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="spy-email-input" placeholder="Atau ketik manual (contoh: budi@camsuter.cc.cd)" 
+                    class="flex-grow py-3 px-4 rounded-xl border border-purple-200 text-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500/30">
+                <button onclick="spyMemberInbox()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-md shadow-purple-600/20 active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i> Sadap Manual
+                </button>
+            </div>
+        </div>
+
+        <!-- Kolom Input Email -->
         <div class="glass-panel rounded-2xl p-6 relative overflow-hidden">
             <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
             
@@ -96,9 +128,7 @@
                     <div class="relative flex items-center bg-slate-50">
                         <span class="pl-4 font-bold text-slate-400">@</span>
                         <select id="domain-select" class="bg-transparent py-3.5 pl-1 pr-10 text-slate-700 font-medium focus:outline-none cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed appearance-none">
-                            <option value="freesiaa.my.id">freesiaa.my.id</option>
-                            <option value="domain.cc.cd">domain.cc.cd</option>
-                            <option value="domain.web.id">domain.web.id</option>
+                            <!-- Opsi domain akan diisi otomatis berdasarkan role -->
                         </select>
                         <i class="fa-solid fa-chevron-down absolute right-4 text-xs text-slate-400 pointer-events-none"></i>
                     </div>
@@ -186,16 +216,24 @@
 
     <script>
         // ==========================================
-        // PENGATURAN UTAMA
+        // PENGATURAN UTAMA & ROLE
         // ==========================================
-        const WORKER_URL = "https://tempmail-api.tyosxyz.workers.dev";
-        const PASSWORD_RAHASIA = "buyerdkh01";
+        const WORKER_URL = "https://tempmail-api.khoirunnisa070508.workers.dev";
+        
+        // Dua jenis password
+        const PASSWORD_ADMIN = "admindkh01";  
+        const PASSWORD_MEMBER = "buyerdkh01"; 
+
+        // Pembagian Domain
+        const DOMAINS_ADMIN = ["camsuter.cc.cd", "dkhsm.cc.cd", "agungganteng.web.id"]; 
+        const DOMAINS_MEMBER = ["dkhsm.cc.cd", "agungganteng.web.id"]; 
 
         let isLocked = false;
         let activeFullEmail = "";
         let emailsData = [];
         let activeEmailIndex = null;
         let refreshTimer = null;
+        let currentUserRole = ""; 
 
         const inputUsername = document.getElementById('username-input');
         const selectDomain = document.getElementById('domain-select');
@@ -208,34 +246,37 @@
         const instructionPanel = document.getElementById('unlock-instruction');
         const inboxPanel = document.getElementById('inbox-panel');
         const emailList = document.getElementById('email-list');
+        const adminPanel = document.getElementById('admin-panel');
 
         // ==========================================
         // SAAT HALAMAN DIMUAT (LOAD)
         // ==========================================
         window.onload = () => {
-            // 1. Cek Sesi Login Password
-            const isLoggedIn = sessionStorage.getItem('tempmail_logged_in');
+            const savedRole = sessionStorage.getItem('tempmail_role');
             const modal = document.getElementById('auth-modal');
             
-            if (isLoggedIn === 'true') {
-                modal.classList.add('hidden'); // Sembunyikan jika sudah pernah login di sesi ini
+            if (savedRole) {
+                modal.classList.add('hidden');
+                currentUserRole = savedRole;
+                setupInterfaceForRole(); 
+                
+                const savedEmail = localStorage.getItem('modern_cf_temp_email');
+                if (savedEmail && savedEmail.includes('@')) {
+                    const parts = savedEmail.split('@');
+                    inputUsername.value = parts[0];
+                    if (Array.from(selectDomain.options).some(opt => opt.value === parts[1])) {
+                        selectDomain.value = parts[1];
+                    }
+                } else {
+                    generateRandom();
+                }
             } else {
-                modal.classList.remove('hidden'); // Tampilkan kotak password
-            }
-
-            // 2. Siapkan Username dan Domain (Cek apakah ada history lokal)
-            const savedEmail = localStorage.getItem('modern_cf_temp_email');
-            if (savedEmail && savedEmail.includes('@')) {
-                const parts = savedEmail.split('@');
-                inputUsername.value = parts[0];
-                selectDomain.value = parts[1];
-            } else {
-                generateRandom();
+                modal.classList.remove('hidden'); 
             }
         };
 
         // ==========================================
-        // FUNGSI CEK PASSWORD
+        // FUNGSI LOGIN & ATUR ROLE
         // ==========================================
         function checkPassword(event) {
             event.preventDefault();
@@ -243,14 +284,109 @@
             const modal = document.getElementById('auth-modal');
             const errorMsg = document.getElementById('error-msg');
 
-            if (inputVal === PASSWORD_RAHASIA) {
+            if (inputVal === PASSWORD_ADMIN) {
+                currentUserRole = 'admin';
+                sessionStorage.setItem('tempmail_role', 'admin');
                 modal.classList.add('hidden');
-                sessionStorage.setItem('tempmail_logged_in', 'true');
+                setupInterfaceForRole();
+                generateRandom();
+            } else if (inputVal === PASSWORD_MEMBER) {
+                currentUserRole = 'member';
+                sessionStorage.setItem('tempmail_role', 'member');
+                modal.classList.add('hidden');
+                setupInterfaceForRole();
+                generateRandom();
             } else {
                 errorMsg.classList.remove('hidden');
                 document.getElementById('password-input').value = '';
                 document.getElementById('password-input').focus();
             }
+        }
+
+        function setupInterfaceForRole() {
+            selectDomain.innerHTML = ''; 
+            const allowedDomains = (currentUserRole === 'admin') ? DOMAINS_ADMIN : DOMAINS_MEMBER;
+            allowedDomains.forEach(domain => {
+                const opt = document.createElement('option');
+                opt.value = domain;
+                opt.textContent = domain;
+                selectDomain.appendChild(opt);
+            });
+
+            const roleBadge = document.getElementById('role-badge');
+            roleBadge.classList.remove('hidden');
+            
+            if (currentUserRole === 'admin') {
+                roleBadge.className = "flex items-center gap-1 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-xs font-bold border border-purple-200 uppercase tracking-wider";
+                roleBadge.innerHTML = `<i class="fa-solid fa-crown text-purple-500"></i> Mode Admin`;
+                adminPanel.classList.remove('hidden');
+                fetchActiveUsers();
+            } else {
+                roleBadge.className = "flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-bold border border-blue-200 uppercase tracking-wider";
+                roleBadge.innerHTML = `<i class="fa-solid fa-user text-blue-500"></i> Mode Member`;
+                adminPanel.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // FITUR LIVE MONITORING ADMIN
+        // ==========================================
+        async function fetchActiveUsers() {
+            const listContainer = document.getElementById('active-users-list');
+            listContainer.innerHTML = `<p class="text-slate-400 text-sm text-center mt-4"><i class="fa-solid fa-spinner fa-spin"></i> Mengecek database server...</p>`;
+            
+            try {
+                const res = await fetch(`${WORKER_URL}/api/users`);
+                const data = await res.json();
+                
+                if (data.users && data.users.length > 0) {
+                    listContainer.innerHTML = '';
+                    data.users.forEach(email => {
+                        const div = document.createElement('div');
+                        div.className = "flex justify-between items-center p-3 mb-1 bg-purple-50/50 hover:bg-purple-100 border border-purple-100 transition-all rounded-lg";
+                        div.innerHTML = `
+                            <span class="text-sm font-semibold text-purple-900"><i class="fa-regular fa-envelope mr-2 text-purple-400"></i> ${email}</span>
+                            <button onclick="spyDirectly('${email}')" class="text-xs bg-purple-600 hover:bg-purple-800 text-white px-4 py-2 rounded-md transition-all font-bold shadow-sm shadow-purple-600/20 active:scale-95">
+                                Pantau
+                            </button>
+                        `;
+                        listContainer.appendChild(div);
+                    });
+                } else {
+                    listContainer.innerHTML = `<p class="text-slate-400 text-sm text-center mt-4">Belum ada member yang menerima email (Database Kosong).</p>`;
+                }
+            } catch(e) {
+                listContainer.innerHTML = `<p class="text-red-400 text-sm text-center mt-4">Gagal terhubung ke Cloudflare.</p>`;
+            }
+        }
+
+        function spyDirectly(email) {
+            document.getElementById('spy-email-input').value = email;
+            spyMemberInbox();
+        }
+
+        function spyMemberInbox() {
+            const spyInput = document.getElementById('spy-email-input').value.trim().toLowerCase();
+            if (!spyInput || !spyInput.includes('@')) {
+                alert("Masukkan alamat email member yang valid!");
+                return;
+            }
+
+            const parts = spyInput.split('@');
+            inputUsername.value = parts[0];
+            
+            let domainExists = Array.from(selectDomain.options).some(opt => opt.value === parts[1]);
+            if (!domainExists) {
+                const opt = document.createElement('option');
+                opt.value = parts[1];
+                opt.textContent = parts[1];
+                selectDomain.appendChild(opt);
+            }
+            selectDomain.value = parts[1];
+
+            if (isLocked) { toggleLock(); }
+            setTimeout(() => { toggleLock(); }, 100);
+            document.getElementById('spy-email-input').value = '';
         }
 
         // ==========================================
@@ -297,7 +433,7 @@
                 inboxPanel.classList.add('flex'); 
 
                 manualRefresh();
-                refreshTimer = setInterval(fetchEmails, 5000); // 5 Detik
+                refreshTimer = setInterval(fetchEmails, 5000);
 
             } else {
                 isLocked = false;
@@ -463,9 +599,7 @@
                                 break; 
                             }
                         }
-                    } catch (e) {
-                        // Abaikan dan lanjut loop
-                    }
+                    } catch (e) {}
                 }
 
                 if (fullMailData) {

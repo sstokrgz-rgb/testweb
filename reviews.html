@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ulasan & Testimoni Pelanggan - AutoOrder Premium</title>
+  <meta name="description" content="Transparansi kepuasan pelanggan yang telah bertransaksi akun aplikasi premium di AutoOrder Store.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white" data-requires-auth="false">
+
+  <!-- Shared Navbar Target -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-24 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header Section (MoraxStore Style) -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-800/80">
+        <div>
+          <!-- Trusted Store Badge -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-wide uppercase mb-3">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            TRUSTED STORE
+          </div>
+          
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Ulasan &amp; Testimoni <span class="text-amber-400">Pelanggan</span>
+          </h1>
+          <p class="text-sm text-slate-400 mt-2 max-w-xl">
+            Transparansi kepuasan pelanggan yang telah bertransaksi di toko kami. Semua ulasan berasal dari transaksi nyata dengan proses otomatis.
+          </p>
+        </div>
+
+        <!-- Write Review Button -->
+        <div class="flex-shrink-0">
+          <button 
+            type="button" 
+            onclick="openReviewModal()" 
+            class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold text-sm shadow-lg shadow-amber-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <span class="text-base">✏</span>
+            <span>Tulis Ulasan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats Highlights -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div class="text-xl sm:text-2xl font-black text-amber-400 flex items-center justify-center gap-1">
+            <span>★</span>
+            <span id="stats-avg-rating">4.9</span>
+          </div>
+          <span class="text-[11px] text-slate-400 block mt-1">Rata-rata Rating</span>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div class="text-xl sm:text-2xl font-black text-teal-400" id="stats-total-reviews">1.250+</div>
+          <span class="text-[11px] text-slate-400 block mt-1">Total Ulasan Masuk</span>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div class="text-xl sm:text-2xl font-black text-emerald-400">99.8%</div>
+          <span class="text-[11px] text-slate-400 block mt-1">Tingkat Kepuasan</span>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl border border-slate-800 text-center">
+          <div class="text-xl sm:text-2xl font-black text-indigo-400">⚡ 5 Detik</div>
+          <span class="text-[11px] text-slate-400 block mt-1">Rata-rata Kirim Akun</span>
+        </div>
+      </div>
+
+      <!-- Reviews Grid (3 cols desktop, 2 tablet, 1 mobile) -->
+      <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered dynamically by js/reviews.js -->
+        <div class="col-span-full py-16 text-center">
+          <div class="spinner w-8 h-8 mx-auto mb-3"></div>
+          <p class="text-slate-400 text-sm">Memuat ulasan pelanggan...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Write Review Modal (Centered Popup) -->
+  <div id="write-review-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto">
+    <div class="bg-slate-900 rounded-3xl max-w-lg w-full border border-slate-700/60 p-6 sm:p-7 relative shadow-2xl animate-modal my-6">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">⭐</span>
+          <h3 class="text-lg font-bold text-white">Tulis Ulasan Pembeli</h3>
+        </div>
+        <button 
+          type="button" 
+          onclick="closeReviewModal()" 
+          class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Review Form -->
+      <form id="write-review-form" onsubmit="handleReviewSubmit(event)" class="space-y-4">
+        <!-- Invoice Input -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-200 mb-1.5">
+            Nomor Invoice (TRX ID) yang Sudah Lunas <span class="text-rose-400">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="review-invoice-input" 
+            placeholder="Contoh: ORD-20261026-XXXX" 
+            required
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all uppercase"
+          >
+          <p class="text-[10px] text-slate-400 mt-1 italic">
+            Hanya transaksi yang telah sukses dibayar yang dapat memberikan ulasan.
+          </p>
+        </div>
+
+        <!-- Rating Dropdown -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-200 mb-1.5">
+            Rating Kepuasan <span class="text-rose-400">*</span>
+          </label>
+          <select 
+            id="review-rating-select" 
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-amber-400 font-bold focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
+          >
+            <option value="5" selected>⭐⭐⭐⭐⭐ (5/5 - Sangat Puas)</option>
+            <option value="4">⭐⭐⭐⭐ (4/5 - Puas)</option>
+            <option value="3">⭐⭐⭐ (3/5 - Cukup)</option>
+            <option value="2">⭐⭐ (2/5 - Kurang)</option>
+            <option value="1">⭐ (1/5 - Sangat Kurang)</option>
+          </select>
+        </div>
+
+        <!-- Comment Textarea -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-200 mb-1.5">
+            Komentar / Testimoni Anda <span class="text-rose-400">*</span>
+          </label>
+          <textarea 
+            id="review-comment-input" 
+            rows="4" 
+            placeholder="Ceritakan pengalaman kepuasan Anda belanja di AutoOrder Store (kecepatan bot, kestabilan akun, respon admin, garansi)..." 
+            required
+            class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-2">
+          <button 
+            type="submit" 
+            id="btn-submit-review"
+            class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-bold text-sm shadow-lg shadow-amber-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <span>✏</span>
+            <span>Kirim Ulasan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/reviews.js"></script>
+</body>
+</html>

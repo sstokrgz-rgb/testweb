@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoOrder Premium Store - Toko App Premium #1 Indonesia</title>
+  <meta name="description" content="Toko App Premium #1 Indonesia. Order aplikasi streaming, produktivitas, dan AI otomatis via Bot Telegram & WhatsApp 24/7 tanpa antre.">
+  <meta name="bot-username" content="tesbothac_bot">
+  <meta name="wa-number" content="6285693436052">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white" data-requires-auth="false">
+
+  <!-- Shared Navbar Target -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-24 pb-16">
+    <!-- Logged In Welcome Banner (Dynamic) -->
+    <div id="user-dashboard-banner" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-indigo-500/30 relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900">
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 mb-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Status Akun: Member VIP Aktif
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">
+              Halo, <span id="banner-username" class="gradient-text">Teman</span>! 👋
+            </h2>
+            <p class="text-slate-300 text-sm mt-1 max-w-xl">
+              Siap untuk upgrade aplikasi favoritmu? Nikmati sistem pengiriman otomatis 10 detik langsung ke Telegram / WhatsApp Anda.
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <a href="catalog.html" class="gradient-btn px-5 py-2.5 rounded-xl text-sm font-bold text-white shadow-lg shadow-indigo-500/25 flex items-center gap-2">
+              <span>🛒</span> Belanja Lagi
+            </a>
+            <a href="transactions.html" class="px-5 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 text-sm font-semibold transition-all">
+              Riwayat Pesanan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-6 pb-20 sm:pb-28">
+      <!-- Glow Gradients in Background -->
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-indigo-600/20 to-purple-600/25 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+      <div class="absolute top-10 left-10 w-72 h-72 bg-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <!-- Floating Status Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-semibold mb-6 shadow-lg shadow-indigo-500/10">
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+          </span>
+          <span>⚡ Sistem Auto Order Bot 24 Jam Non-Stop</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6">
+          Toko App Premium <br class="hidden sm:inline" />
+          <span class="gradient-text">#1 Indonesia</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="max-w-2xl mx-auto text-base sm:text-xl text-slate-300 mb-10 leading-relaxed">
+          Order aplikasi premium murah, cepat, dan terpercaya. Akun otomatis dikirim dalam 10 detik via Bot Telegram &amp; WhatsApp resmi kami.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
+          <a href="catalog.html" class="w-full sm:w-auto gradient-btn px-8 py-4 rounded-2xl text-base font-bold text-white shadow-xl shadow-indigo-500/25 flex items-center justify-center gap-2.5">
+            <span>🚀 Mulai Belanja</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+          <a href="register.html" id="hero-register-btn" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-base transition-all flex items-center justify-center gap-2">
+            <span>✨ Daftar Sekarang</span>
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+          <div class="glass-panel p-4 rounded-2xl border border-slate-800/80">
+            <div class="text-2xl mb-1">⚡</div>
+            <div class="font-bold text-sm text-slate-200">10 Detik Kirim</div>
+            <div class="text-xs text-slate-400">Otomatis via Bot 24/7</div>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-800/80">
+            <div class="text-2xl mb-1">🛡️</div>
+            <div class="font-bold text-sm text-slate-200">Garansi Penuh</div>
+            <div class="text-xs text-slate-400">Ganti baru jika kendala</div>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-800/80">
+            <div class="text-2xl mb-1">💳</div>
+            <div class="font-bold text-sm text-slate-200">Semua Pembayaran</div>
+            <div class="text-xs text-slate-400">QRIS, E-Wallet & Bank</div>
+          </div>
+          <div class="glass-panel p-4 rounded-2xl border border-slate-800/80">
+            <div class="text-2xl mb-1">💎</div>
+            <div class="font-bold text-sm text-slate-200">Harga Termurah</div>
+            <div class="text-xs text-slate-400">Mulai Rp 15.000-an</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 border-y border-slate-800/80 bg-slate-900/40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">15.000+</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-1">Pengguna Terdaftar</div>
+          </div>
+          <div>
+            <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">45.000+</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-1">Pesanan Sukses</div>
+          </div>
+          <div>
+            <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-400">99.8%</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-1">Uptime Otomatis</div>
+          </div>
+          <div>
+            <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">4.9 / 5.0</div>
+            <div class="text-xs sm:text-sm font-medium text-slate-400 mt-1">Rating Kepuasan</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10">
+        <div>
+          <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-1">Aplikasi Terpopuler</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Paling Banyak Dibeli Minggu Ini</h2>
+        </div>
+        <a href="catalog.html" class="mt-4 sm:mt-0 text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 group">
+          <span>Lihat Semua Katalog</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="featured-products-container">
+        <!-- Netflix Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800 card-hover flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl">🎬</span>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">Hot 🔥</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-lg">Netflix Premium 4K</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Ultra HD 4K, bebas profile sendiri, garansi anti on-hold 30 hari.</p>
+          </div>
+          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between mt-5">
+            <div>
+              <span class="text-[10px] text-slate-500 line-through block">Rp 186.000</span>
+              <span class="text-lg font-extrabold text-indigo-400">Rp 32.000</span>
+            </div>
+            <a href="catalog.html" class="px-3.5 py-2 rounded-xl gradient-btn text-white text-xs font-bold shadow-md shadow-indigo-500/20">Beli</a>
+          </div>
+        </div>
+
+        <!-- ChatGPT Plus Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800 card-hover flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl">🤖</span>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">AI Pro</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-lg">ChatGPT Plus (GPT-4o)</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Akses GPT-4o, DALL·E 3, analisa data cepat tanpa antrean.</p>
+          </div>
+          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between mt-5">
+            <div>
+              <span class="text-[10px] text-slate-500 line-through block">Rp 320.000</span>
+              <span class="text-lg font-extrabold text-indigo-400">Rp 75.000</span>
+            </div>
+            <a href="catalog.html" class="px-3.5 py-2 rounded-xl gradient-btn text-white text-xs font-bold shadow-md shadow-indigo-500/20">Beli</a>
+          </div>
+        </div>
+
+        <!-- Spotify Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800 card-hover flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl">🎵</span>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Laris</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-lg">Spotify Premium</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Bebas iklan, download offline 320kbps, bisa akun pribadi.</p>
+          </div>
+          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between mt-5">
+            <div>
+              <span class="text-[10px] text-slate-500 line-through block">Rp 54.990</span>
+              <span class="text-lg font-extrabold text-indigo-400">Rp 18.000</span>
+            </div>
+            <a href="catalog.html" class="px-3.5 py-2 rounded-xl gradient-btn text-white text-xs font-bold shadow-md shadow-indigo-500/20">Beli</a>
+          </div>
+        </div>
+
+        <!-- Canva Pro Card -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800 card-hover flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-3xl">🎨</span>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Desain</span>
+            </div>
+            <h3 class="font-bold text-slate-100 text-lg">Canva Pro Lifetime</h3>
+            <p class="text-xs text-slate-400 mt-1 line-clamp-2">Semua fitur premium &amp; AI terbuka, hapus background 1 klik.</p>
+          </div>
+          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between mt-5">
+            <div>
+              <span class="text-[10px] text-slate-500 line-through block">Rp 120.000</span>
+              <span class="text-lg font-extrabold text-indigo-400">Rp 20.000</span>
+            </div>
+            <a href="catalog.html" class="px-3.5 py-2 rounded-xl gradient-btn text-white text-xs font-bold shadow-md shadow-indigo-500/20">Beli</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-slate-900/50 border-t border-slate-800/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+          <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Simpel &amp; Praktis</span>
+          <h2 class="text-3xl font-extrabold text-white">Cara Kerja Sistem Auto Order</h2>
+          <p class="text-sm text-slate-400 mt-2">Dapatkan akun aplikasi premium impian Anda hanya dalam 3 langkah super cepat.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <div class="glass-panel p-6 rounded-3xl border border-slate-800 relative z-10 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black mx-auto mb-5 shadow-lg shadow-indigo-500/30">
+              1
+            </div>
+            <h3 class="font-bold text-lg text-white mb-2">Pilih Aplikasi</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Jelajahi katalog aplikasi favorit Anda (Streaming, AI, Desain, atau Edukasi) dan tentukan durasi yang Anda inginkan.
+            </p>
+          </div>
+
+          <div class="glass-panel p-6 rounded-3xl border border-slate-800 relative z-10 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-600 flex items-center justify-center text-white text-2xl font-black mx-auto mb-5 shadow-lg shadow-purple-500/30">
+              2
+            </div>
+            <h3 class="font-bold text-lg text-white mb-2">Bayar Instan QRIS</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Scan barcode QRIS dengan aplikasi perbankan atau e-wallet apa saja (GoPay, DANA, OVO, ShopeePay, BCA, dll).
+            </p>
+          </div>
+
+          <div class="glass-panel p-6 rounded-3xl border border-slate-800 relative z-10 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 flex items-center justify-center text-white text-2xl font-black mx-auto mb-5 shadow-lg shadow-emerald-500/30">
+              3
+            </div>
+            <h3 class="font-bold text-lg text-white mb-2">Akun Otomatis Terkirim</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Sistem robot kami langsung mengirim email, password, dan panduan login ke Telegram atau WhatsApp Anda dalam 10 detik!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Testimoni Nyata</span>
+        <h2 class="text-3xl font-extrabold text-white">Apa Kata Pelanggan Kami?</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-panel p-6 rounded-2xl border border-slate-800/80">
+          <div class="flex items-center gap-1 text-amber-400 mb-3 text-sm">★★★★★</div>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            "Awalnya ragu karena harganya murah banget. Pas scan QRIS, beneran dalam 5 detik bot Telegram langsung ngasih email sama password Netflix 4K. Keren pol!"
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">F</div>
+            <div>
+              <div class="text-xs font-bold text-white">Fajar Nugroho</div>
+              <div class="text-[10px] text-slate-400">Pengguna Netflix &amp; ChatGPT</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-800/80">
+          <div class="flex items-center gap-1 text-amber-400 mb-3 text-sm">★★★★★</div>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            "Beli Claude Pro dan Canva buat kebutuhan skripsi dan kerjaan desain. Auto kirimnya praktis banget tanpa perlu nunggu admin bales chat WA manual."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xs">A</div>
+            <div>
+              <div class="text-xs font-bold text-white">Annisa Larasati</div>
+              <div class="text-[10px] text-slate-400">Mahasiswi &amp; Freelancer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-800/80">
+          <div class="flex items-center gap-1 text-amber-400 mb-3 text-sm">★★★★★</div>
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            "Akun Spotify aman gak pernah mental. Udah langganan 3 bulan di sini, selalu lancar. Pelayanan botnya mantap!"
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs">R</div>
+            <div>
+              <div class="text-xs font-bold text-white">Rizky Ramadhan</div>
+              <div class="text-[10px] text-slate-400">Member Aktif</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-base">⚡</div>
+            <span class="font-bold text-lg text-white">AutoOrder Premium</span>
+          </div>
+          <p class="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
+            Platform penyedia akun aplikasi premium otomatis nomor satu di Indonesia. Pelayanan instan 24/7 didukung bot integrasi Telegram &amp; WhatsApp.
+          </p>
+          <div class="flex items-center gap-3 text-xs text-slate-400">
+            <span>🛡️ Garansi Replace 100%</span>
+            <span>•</span>
+            <span>⚡ Pengiriman Instan</span>
+            <span>•</span>
+            <span>💬 CS Siap Membantu</span>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-sm text-slate-200 mb-3">Navigasi</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="index.html" class="hover:text-white transition-colors">Beranda</a></li>
+            <li><a href="catalog.html" class="hover:text-white transition-colors">Katalog Aplikasi</a></li>
+            <li><a href="cart.html" class="hover:text-white transition-colors">Keranjang</a></li>
+            <li><a href="transactions.html" class="hover:text-white transition-colors">Cek Pesanan</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-sm text-slate-200 mb-3">Integrasi Bot</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="https://t.me/tesbothac_bot" target="_blank" class="hover:text-sky-400 transition-colors">🤖 Bot Telegram (@tesbothac_bot)</a></li>
+            <li><a href="https://wa.me/6285693436052" target="_blank" class="hover:text-emerald-400 transition-colors">📱 Bot WhatsApp Official</a></li>
+            <li class="pt-2 text-[11px] text-slate-500">Menerima pembayaran QRIS semua bank &amp; dompet digital.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <div>&copy; 2026 AutoOrder Premium Store. Seluruh hak cipta dilindungi.</div>
+        <div class="mt-2 sm:mt-0 flex gap-4">
+          <span class="hover:text-slate-400 cursor-pointer">Syarat &amp; Ketentuan</span>
+          <span class="hover:text-slate-400 cursor-pointer">Kebijakan Privasi</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const banner = document.getElementById('user-dashboard-banner');
+      const bannerUser = document.getElementById('banner-username');
+      const heroRegisterBtn = document.getElementById('hero-register-btn');
+
+      if (token && user) {
+        if (banner) banner.classList.remove('hidden');
+        if (bannerUser) bannerUser.textContent = user.username || 'Member VIP';
+        if (heroRegisterBtn) {
+          heroRegisterBtn.innerHTML = '<span>📦 Buka Dashboard Akun</span>';
+          heroRegisterBtn.href = 'profile.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

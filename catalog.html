@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Aplikasi Premium - AutoOrder</title>
+  <meta name="description" content="Jelajahi seluruh koleksi akun aplikasi premium termurah dan resmi dengan pengiriman otomatis.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-purple-500 selection:text-white" data-requires-auth="false">
+
+  <!-- Shared Navbar Target -->
+  <div id="shared-navbar"></div>
+
+  <!-- Main Content -->
+  <main class="flex-grow pt-24 pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Catalog Header -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">Pilihan Terlengkap</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white">Katalog Aplikasi Premium</h1>
+        <p class="text-sm text-slate-400 mt-2">Pilih aplikasi favoritmu. Akun dikirim secara otomatis oleh bot dalam hitungan detik setelah pembayaran.</p>
+      </div>
+
+      <!-- Search Bar and Filter Controls -->
+      <div class="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 mb-8 max-w-4xl mx-auto shadow-xl">
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <!-- Search Input -->
+          <div class="relative w-full">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input 
+              type="text" 
+              id="catalog-search" 
+              placeholder="Cari aplikasi (misal: Netflix, ChatGPT, Canva, Spotify)..." 
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            >
+          </div>
+
+          <!-- Total Counter -->
+          <div class="w-full sm:w-auto text-xs text-slate-400 font-medium whitespace-nowrap text-right sm:text-left" id="products-count">
+            Memuat aplikasi...
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="flex items-center gap-2 mt-4 overflow-x-auto pb-1 pt-1 no-scrollbar">
+          <button 
+            type="button" 
+            class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 whitespace-nowrap transition-all"
+            data-category="All"
+          >
+            🔥 Semua
+          </button>
+          <button 
+            type="button" 
+            class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 whitespace-nowrap transition-all"
+            data-category="Streaming"
+          >
+            🎬 Streaming
+          </button>
+          <button 
+            type="button" 
+            class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 whitespace-nowrap transition-all"
+            data-category="Produktivitas"
+          >
+            💼 Produktivitas
+          </button>
+          <button 
+            type="button" 
+            class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 whitespace-nowrap transition-all"
+            data-category="AI & Tools"
+          >
+            🤖 AI &amp; Tools
+          </button>
+          <button 
+            type="button" 
+            class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 whitespace-nowrap transition-all"
+            data-category="Edukasi"
+          >
+            📚 Edukasi
+          </button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically by js/catalog.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Product Detail Modal (MoraxStore Style) -->
+  <div id="product-detail-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-950/85 backdrop-blur-md overflow-y-auto">
+    <div class="bg-slate-900 rounded-t-3xl sm:rounded-3xl max-w-lg w-full border border-slate-700/50 animate-modal my-0 sm:my-8 max-h-[92vh] overflow-y-auto relative">
+      
+      <!-- Modal Header -->
+      <div class="sticky top-0 z-10 bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-2xl flex-shrink-0" id="modal-product-icon">📦</div>
+        <div class="flex-1 min-w-0">
+          <span class="text-[10px] font-bold text-teal-400 uppercase tracking-wider flex items-center gap-1" id="modal-product-category">📦 Kategori</span>
+          <h2 class="text-base font-extrabold text-white leading-tight truncate" id="modal-product-title">Nama Produk</h2>
+        </div>
+        <button onclick="closeProductModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="px-5 py-4 space-y-4">
+        <!-- Stock & Sold Info -->
+        <div class="flex items-center gap-4 text-xs font-semibold">
+          <span class="text-teal-400">📦 Stok: <span id="modal-stock">50</span> Unit</span>
+          <span class="text-amber-400">🔥 Terjual: <span id="modal-sold">328</span> Unit</span>
+        </div>
+        <p class="text-xs text-slate-300" id="modal-subtitle">Private Akun, Garansi Penuh 30 Hari</p>
+
+        <!-- Expandable S&K -->
+        <details class="group">
+          <summary class="flex items-center gap-1 text-xs font-semibold text-teal-400 cursor-pointer hover:text-teal-300 transition-colors">
+            <span>▼</span>
+            <span>📋 Lihat Syarat & Ketentuan (SnK) Produk</span>
+          </summary>
+          <div class="mt-2 p-3 rounded-xl bg-slate-950 border border-slate-700/50 text-xs text-slate-300 font-mono leading-relaxed whitespace-pre-line" id="modal-snk">
+Deskripsi produk akan muncul di sini...
+          </div>
+        </details>
+
+        <!-- STEP 1: Quantity & Recipient -->
+        <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">1</span>
+            Atur Jumlah & Data Penerima
+          </h4>
+          
+          <div class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-xs font-semibold text-slate-200">Jumlah Pembelian <span class="text-slate-400 font-normal" id="modal-max-qty">(Maks. 50 unit)</span></label>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" onclick="changeQty(-1)" class="w-9 h-9 rounded-xl bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center text-lg font-bold transition-colors">−</button>
+                <input type="number" id="modal-qty-input" value="1" min="1" max="50" class="w-16 h-9 bg-slate-900 border border-slate-600 rounded-xl text-sm font-bold text-white text-center focus:outline-none focus:border-teal-500">
+                <button type="button" onclick="changeQty(1)" class="w-9 h-9 rounded-xl bg-slate-700 hover:bg-slate-600 text-white flex items-center justify-center text-lg font-bold transition-colors">+</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-slate-200 flex items-center gap-1">
+                <span class="text-teal-400">●</span> ID Telegram Penerima <span class="text-slate-500 font-normal">(Opsional)</span>
+              </label>
+              <input type="text" id="modal-telegram-id" placeholder="Contoh: 8392676485 (Kosongkan jika hanya ambil di Web)" class="w-full mt-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-600 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-teal-500 transition-colors">
+              <p class="text-[10px] text-slate-400 mt-1 italic">Jika diisi, data akun akan tampil di layar Web sekaligus dikirim otomatis ke chat Telegram Anda!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Promo Code -->
+        <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">2</span>
+            Kode Promo / Kupon (Opsional)
+          </h4>
+          <div class="flex items-center gap-2">
+            <input type="text" id="modal-promo-code" placeholder="Ketik kode kupon diskon..." class="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-600 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-teal-500">
+            <button type="button" onclick="applyPromo()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition-colors">Gunakan</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Payment Method -->
+        <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700/50">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-teal-500 text-white text-xs font-bold flex items-center justify-center">3</span>
+            Pilih Metode Pembayaran
+          </h4>
+          <div class="grid grid-cols-2 gap-2" id="modal-payment-methods">
+            <label class="payment-method-card cursor-pointer">
+              <input type="radio" name="payment-method" value="qris" checked class="hidden peer">
+              <div class="p-3 rounded-xl border-2 border-slate-600 peer-checked:border-teal-500 bg-slate-900 hover:border-slate-500 transition-all">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-white">🏧 QRIS Instant</span>
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-500/20 text-green-400 border border-green-500/30">OTOMATIS</span>
+                </div>
+                <div class="text-sm font-extrabold text-teal-400" id="modal-price-qris">Rp 0</div>
+                <p class="text-[9px] text-slate-400 mt-0.5">DANA, GoPay, OVO, ShopeePay, BCA, Mandiri, BRI</p>
+              </div>
+            </label>
+            <label class="payment-method-card cursor-pointer">
+              <input type="radio" name="payment-method" value="saldo" class="hidden peer">
+              <div class="p-3 rounded-xl border-2 border-slate-600 peer-checked:border-teal-500 bg-slate-900 hover:border-slate-500 transition-all">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs font-bold text-white">💰 Saldo Akun</span>
+                  <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">MEMBER</span>
+                </div>
+                <div class="text-sm font-extrabold text-teal-400" id="modal-price-saldo">Rp 0</div>
+                <p class="text-[9px] text-slate-400 mt-0.5">⚠ Saldo Anda: Rp 0</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar (sticky) -->
+      <div class="sticky bottom-0 bg-slate-900 border-t border-slate-800 px-5 py-4">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="text-[10px] text-slate-400 block">Total Pembayaran</span>
+            <span class="text-xl font-extrabold text-white" id="modal-total-price">Rp 0</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="buyViaBotTelegram()" class="flex-1 py-2.5 rounded-xl border-2 border-teal-500 text-teal-400 hover:bg-teal-500/10 text-xs font-bold transition-colors flex items-center justify-center gap-1.5">
+            <span>🤖</span> Beli di Bot Telegram
+          </button>
+          <button onclick="handleModalCheckout()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white text-xs font-bold transition-all shadow-lg shadow-amber-500/25 flex items-center justify-center gap-1.5">
+            Bayar Sekarang
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/catalog.js"></script>
+  <script>
+    // Handle URL search parameter if routed from other pages
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('search');
+      if (query) {
+        const searchInput = document.getElementById('catalog-search');
+        if (searchInput) {
+          searchInput.value = query;
+          searchInput.dispatchEvent(new Event('input'));
+        }
+      }
+    });
+
+    // ======================= REAL-TIME STOCK BADGE (SINKRON BOT WA & TELE) =======================
+    (function initRealtimeCatalogStock() {
+      let latestProductsMapById = new Map();
+      let latestProductsMapByName = new Map();
+      let isRenderingBadges = false;
+
+      function normalizeName(str) {
+        return String(str || '')
+          .replace(/^[\p{Emoji}\u2000-\u3300\s]+/u, '')
+          .trim()
+          .toLowerCase();
+      }
+
+      async function fetchRealtimeStock() {
+        try {
+          const res = await fetch('/api/products?t=' + Date.now(), {
+            headers: { 'Cache-Control': 'no-cache' }
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          const list = Array.isArray(data)
+            ? data
+            : (Array.isArray(data.products) ? data.products : (Array.isArray(data.data) ? data.data : []));
+
+          if (list.length > 0) {
+            latestProductsMapById.clear();
+            latestProductsMapByName.clear();
+            list.forEach(p => {
+              const stockNum = Math.max(0, Number(p.stock) || 0);
+              if (p.id !== undefined && p.id !== null) {
+                latestProductsMapById.set(String(p.id), stockNum);
+              }
+              if (p.name) {
+                latestProductsMapByName.set(normalizeName(p.name), stockNum);
+              }
+            });
+            renderStockBadgesOnCards();
+            updateModalRealtimeStock();
+          }
+        } catch (err) {
+          // Fallback ke data lokal jika API belum merespons
+          renderStockBadgesOnCards();
+        }
+      }
+
+      function resolveCardStock(card) {
+        // 1. Cek atribut data-id / data-product-id pada card atau tombol di dalamnya
+        const idAttr =
+          card.getAttribute('data-product-id') ||
+          card.getAttribute('data-id') ||
+          card.querySelector('[data-product-id]')?.getAttribute('data-product-id') ||
+          card.querySelector('[data-id]')?.getAttribute('data-id');
+
+        if (idAttr && latestProductsMapById.has(String(idAttr))) {
+          return latestProductsMapById.get(String(idAttr));
+        }
+
+        // 2. Cek parameter ID pada atribut onclick (misal: openProductModal(1))
+        const clickable = card.querySelector('[onclick]') || (card.hasAttribute('onclick') ? card : null);
+        if (clickable) {
+          const onclickStr = clickable.getAttribute('onclick') || '';
+          const matchId = onclickStr.match(/\((\d+)\)/);
+          if (matchId && latestProductsMapById.has(matchId[1])) {
+            return latestProductsMapById.get(matchId[1]);
+          }
+        }
+
+        // 3. Cek berdasarkan nama produk pada judul card (h2 / h3 / h4)
+        const titleEl = card.querySelector('h2, h3, h4');
+        if (titleEl) {
+          const cleanTitle = normalizeName(titleEl.textContent);
+          if (latestProductsMapByName.has(cleanTitle)) {
+            return latestProductsMapByName.get(cleanTitle);
+          }
+          for (const [nameKey, stockVal] of latestProductsMapByName.entries()) {
+            if (cleanTitle.includes(nameKey) || nameKey.includes(cleanTitle)) {
+              return stockVal;
+            }
+          }
+        }
+
+        // 4. Fallback ke atribut data-stock jika disediakan oleh catalog.js
+        if (card.hasAttribute('data-stock')) {
+          return Math.max(0, Number(card.getAttribute('data-stock')) || 0);
+        }
+
+        return null;
+      }
+
+      function createOrUpdateBadgeHTML(badgeEl, stock) {
+        const isAvailable = stock > 0;
+        if (isAvailable) {
+          badgeEl.className =
+            'realtime-stock-badge px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 inline-flex items-center gap-1.5 whitespace-nowrap';
+          badgeEl.innerHTML =
+            `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>` +
+            `<span>Stok: ${stock}</span>`;
+        } else {
+          badgeEl.className =
+            'realtime-stock-badge px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30 inline-flex items-center gap-1.5 whitespace-nowrap';
+          badgeEl.innerHTML =
+            `<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>` +
+            `<span>Stok Kosong</span>`;
+        }
+      }
+
+      function renderStockBadgesOnCards() {
+        const grid = document.getElementById('products-grid');
+        if (!grid) return;
+
+        isRenderingBadges = true;
+        try {
+          const cards = Array.from(grid.children);
+          cards.forEach(card => {
+            // Lewati jika ini elemen pesan kosong / loading skeleton
+            if (!card.querySelector('h2, h3, h4')) return;
+
+            const stock = resolveCardStock(card);
+            if (stock === null) return;
+
+            let existingBadge = card.querySelector('.realtime-stock-badge');
+            if (existingBadge) {
+              createOrUpdateBadgeHTML(existingBadge, stock);
+              return;
+            }
+
+            // Cari baris header atas card (tempat icon & badge kategori seperti "Streaming" berada)
+            const topRow = card.firstElementChild;
+            if (!topRow) return;
+
+            // Ambil elemen kategori di sebelah kanan atas card
+            const categoryEl = topRow.children.length > 1 ? topRow.lastElementChild : null;
+            if (!categoryEl) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'stock-category-group flex items-center gap-2 flex-wrap justify-end';
+
+            const badgeEl = document.createElement('span');
+            createOrUpdateBadgeHTML(badgeEl, stock);
+
+            topRow.replaceChild(wrapper, categoryEl);
+            wrapper.appendChild(badgeEl);
+            wrapper.appendChild(categoryEl);
+          });
+        } finally {
+          isRenderingBadges = false;
+        }
+      }
+
+      function updateModalRealtimeStock() {
+        const modal = document.getElementById('product-detail-modal');
+        if (!modal || modal.classList.contains('hidden')) return;
+
+        const titleEl = document.getElementById('modal-product-title');
+        const stockEl = document.getElementById('modal-stock');
+        const maxQtyEl = document.getElementById('modal-max-qty');
+        const qtyInput = document.getElementById('modal-qty-input');
+
+        if (!titleEl || !stockEl) return;
+        const cleanTitle = normalizeName(titleEl.textContent);
+        if (!latestProductsMapByName.has(cleanTitle)) return;
+
+        const stock = latestProductsMapByName.get(cleanTitle);
+        const stockParent = stockEl.parentElement;
+
+        if (stock <= 0) {
+          if (stockParent) {
+            stockParent.className = 'text-rose-400';
+            stockParent.innerHTML = '📦 <span id="modal-stock">Stok Kosong</span>';
+          }
+          if (maxQtyEl) maxQtyEl.textContent = '(Stok Kosong)';
+          if (qtyInput) qtyInput.max = 0;
+        } else {
+          if (stockParent) {
+            stockParent.className = 'text-teal-400';
+            stockParent.innerHTML = `📦 Stok: <span id="modal-stock">${stock}</span> Unit`;
+          }
+          if (maxQtyEl) maxQtyEl.textContent = `(Maks. ${stock} unit)`;
+          if (qtyInput) qtyInput.max = stock;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('products-grid');
+        if (grid) {
+          const observer = new MutationObserver(() => {
+            if (!isRenderingBadges) {
+              renderStockBadgesOnCards();
+            }
+          });
+          observer.observe(grid, { childList: true });
+        }
+
+        // Ambil stok real-time saat halaman dimuat dan perbarui otomatis setiap 4 detik
+        fetchRealtimeStock();
+        setInterval(fetchRealtimeStock, 4000);
+      });
+    })();
+  </script>
+</body>
+</html>
